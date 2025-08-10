@@ -2,11 +2,15 @@ import { getBreedDetails } from "@/lib/services/breeds";
 import Image from "next/image";
 import { GalleryGridWithModal } from "@/components/GalleryGridWithModal";
 
-type Props = { params: { source: "cat" | "dog"; id: string } };
+type RouteParams = { source: "cat" | "dog"; id: string };
 export const revalidate = 3600;
 
-export default async function BreedPage({ params }: Props) {
-  const { source, id } = params;
+export default async function BreedPage({
+  params,
+}: {
+  params: Promise<RouteParams>;
+}) {
+  const { source, id } = await params;
   if (source !== "cat" && source !== "dog") throw new Error(`Invalid source: ${source}`);
 
   const { breed, gallery } = await getBreedDetails(source, id);
